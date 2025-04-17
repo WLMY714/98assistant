@@ -205,6 +205,7 @@ class SignPage(QWidget):
             obj = json.load(f)
         obj["data"]["sign_result"] = []
         with open(resource_path('./Resource/cache/data.json'), 'w', encoding='utf-8') as f:
+
             json.dump(obj, f, ensure_ascii=False, indent=4)
         self.clear_success()
 
@@ -337,12 +338,12 @@ class SignPage(QWidget):
             if item and (button := item.widget()):
                 if sign_info["name"] in button.text():  # 任务匹配
                     button.deleteLater()
-                    new_Text = ""
+                    new_text = ""
                     if sign_info["code"] :
-                        new_Text = f'[签到完成] {sign_info["name"]}\n[签到帖子] {sign_info["title"]}\n[签到回复] {sign_info["reply"]}\n[签到时间] {sign_info["time"]}'
+                        new_text = f'[签到完成] {sign_info["name"]}\n[签到帖子] {sign_info["title"]}\n[签到回复] {sign_info["reply"]}\n[签到时间] {sign_info["time"]}'
                     else :
-                        new_Text = f'[签到失败] {sign_info["name"]}\n[失败原因] {sign_info["error_reason"]}'
-                    new_button = HyperlinkButton(text=new_Text, url=sign_info["url"], parent=self.task_result_widget)
+                        new_text = f'[签到失败] {sign_info["name"]}\n[失败原因] {sign_info["error_reason"]}'
+                    new_button = HyperlinkButton(text=new_text, url=sign_info["url"], parent=self.task_result_widget)
                     if sign_info["code"]:
                         new_button.setStyleSheet("""
                             HyperlinkButton {

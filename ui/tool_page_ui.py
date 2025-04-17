@@ -53,41 +53,6 @@ class ToolThread(QThread):
         elif self.taskname == 'ranking':
             pass
 
-# class CustomMessageBox(MessageBoxBase):
-#     """ Custom message box """
-#     def __init__(self, title='', message='', error='', parent=None):
-#         super().__init__(parent)
-#         self.titleLabel = SubtitleLabel(title, self)
-#         self.urlLineEdit = LineEdit(self)
-#
-#         self.urlLineEdit.setPlaceholderText(message)
-#         self.urlLineEdit.setClearButtonEnabled(True)
-#
-#         self.warningLabel = CaptionLabel(error)
-#         self.warningLabel.setTextColor("#cf1010", QColor(255, 28, 32))
-#
-#         # add widget to view layout
-#         self.viewLayout.addWidget(self.titleLabel)
-#         self.viewLayout.addWidget(self.urlLineEdit)
-#         self.viewLayout.addWidget(self.warningLabel)
-#         self.warningLabel.hide()
-#
-#         # change the text of button
-#         self.yesButton.setText('添加')
-#         self.cancelButton.setText('取消')
-#         self.widget.setMinimumWidth(350)
-#
-#
-#     def validate(self):
-#         """ Rewrite the virtual method """
-#         isValid = False
-#         valid_code = ['1', '2', '3', 'lbsl98t', 'yut98t', 'r3698t', 'lbsl98t-l', 'yut98t-l']
-#         if self.urlLineEdit.text() in valid_code :
-#             isValid = True
-#         self.warningLabel.setHidden(isValid)
-#         self.urlLineEdit.setError(not isValid)
-#         return isValid
-
 class ToolPage(QWidget):
     def __init__(self):
         super().__init__()
@@ -112,7 +77,6 @@ class ToolPage(QWidget):
 
         tool_widget = QWidget()
         self.tool_layout = FlowLayout(tool_widget)
-        # self.tool_layout.addStretch()
         tool_scroll = ScrollArea()
         tool_scroll.setWidgetResizable(True)
         tool_scroll.setWidget(tool_widget)
@@ -228,7 +192,6 @@ class ToolPage(QWidget):
             parent=self
         )
         self.tool_layout.addWidget(kill_card)
-
 
         self.init_widget()
 

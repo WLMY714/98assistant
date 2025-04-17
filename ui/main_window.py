@@ -1,4 +1,4 @@
-import sys
+
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtGui import QDesktopServices, QIcon
 from PySide6.QtWidgets import QApplication, QFrame, QStackedWidget, QHBoxLayout, QLabel
@@ -6,20 +6,19 @@ from PySide6.QtWidgets import QApplication, QFrame, QStackedWidget, QHBoxLayout,
 from qfluentwidgets import NavigationInterface, NavigationItemPosition, MessageBox, NavigationAvatarWidget
 from qfluentwidgets import FluentIcon as FIF
 from qframelesswindow import StandardTitleBar, FramelessWindow
-from ui import setting_page_ui, sign_page_ui, score_page_ui, vedio_page_ui, tool_page_ui, help_page_ui
-from pathlib import Path
+from ui import setting_page_ui, sign_page_ui, score_page_ui, vedio_page_ui, tool_page_ui, help_page_ui, update_page_ui
 
 from Utils.path_resolver import resource_path
 
-class Widget(QFrame):
-
-    def __init__(self, text: str, parent=None):
-        super().__init__(parent=parent)
-        self.label = QLabel(text, self)
-        self.label.setAlignment(Qt.AlignCenter)
-        self.hBoxLayout = QHBoxLayout(self)
-        self.hBoxLayout.addWidget(self.label, 1, Qt.AlignCenter)
-        self.setObjectName(text.replace(' ', '-'))
+# class Widget(QFrame):
+#
+#     def __init__(self, text: str, parent=None):
+#         super().__init__(parent=parent)
+#         self.label = QLabel(text, self)
+#         self.label.setAlignment(Qt.AlignCenter)
+#         self.hBoxLayout = QHBoxLayout(self)
+#         self.hBoxLayout.addWidget(self.label, 1, Qt.AlignCenter)
+#         self.setObjectName(text.replace(' ', '-'))
 
 
 class MainWindow(FramelessWindow):
@@ -40,7 +39,7 @@ class MainWindow(FramelessWindow):
         self.scoreInterface = score_page_ui.ScorePage()
         self.vedioInterface = vedio_page_ui.VedioPage()
         self.toolInterface = tool_page_ui.ToolPage()
-        self.updateInterface = Widget('检查更新（待开发……）', self)
+        self.updateInterface = update_page_ui.UpdatePage()
         self.helpInterface = help_page_ui.HelpPage()
 
         # 初始化布局
@@ -84,7 +83,7 @@ class MainWindow(FramelessWindow):
     def initWindow(self):
         self.resize(900, 700)
         self.setWindowIcon(QIcon(resource_path('Resource/image/logo.png')))
-        self.setWindowTitle('98助手客户端UI 1.2')
+        self.setWindowTitle('98助手客户端UI 1.3')
         self.setQss()
 
         desktop = QApplication.primaryScreen().availableGeometry()
@@ -118,11 +117,11 @@ class MainWindow(FramelessWindow):
     def showMessageBox(self):
         w = MessageBox(
             '支持作者🥰',
-            '如果这个项目帮助到了您，可以点一个免费的star⭐\n个人开发不易，您的支持就是作者开发和维护项目的动力🚀',
+            '如果这个项目帮助到了您，可以点一个免费的star⭐😘\n个人开发不易，您的支持就是作者开发和维护项目的动力🚀',
             self
         )
         w.yesButton.setText('来啦老弟')
         w.cancelButton.setText('下次一定')
 
         if w.exec():
-            QDesktopServices.openUrl(QUrl("https://sehuatang.net/home.php?mod=space&uid=455944"))
+            QDesktopServices.openUrl(QUrl("https://github.com/WLMY714/98assistant"))
