@@ -148,11 +148,15 @@ def test_cookie(cookie, domin):
 
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M')
 
+        folder_path = resource_path('./Resource/cache/photo')
         if photo == "":
             shutil.copy(folder_path + '/default.gif', folder_path + f'/{name}.gif')
         else:
-            folder_path = resource_path('./Resource/cache/photo')
+            photo = photo.replace('small', 'big')
             down_sign = photo_downloader.download_photo(url=photo, username=name, domin=domin, cookie=cookie)
+            if not down_sign:
+                photo = photo.replace('big', 'small')
+                down_sign = photo_downloader.download_photo(url=photo, username=name, domin=domin, cookie=cookie)
             if not down_sign:
                 is_photo_exist = (Path(folder_path) / f'{name}.gif').is_file()
                 if not is_photo_exist:

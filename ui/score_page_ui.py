@@ -21,7 +21,10 @@ from Utils.path_resolver import resource_path
 
 def score(info):
 
+    print(info['name'], info['pyer'], info['sleep'])
+
     sleep(info["sleep"])
+
     result = {
         "code": False,
         "error_reason": "未知错误，点此检查",
@@ -72,8 +75,7 @@ class ScoreThread(QThread):
 
     def __init__(self, task_data: dict):
         super().__init__()
-        self.task_data = task_data
-
+        self.task_data = task_data.copy()
     def run(self):
         try:
             task_result = score(self.task_data)
@@ -413,16 +415,14 @@ class ScorePage(QWidget):
         self.btn_Enable_false()
         accounts = []
         pyposts = []
-        sleep_num = 10
+
         for i in range(self.info_account_layout.count()):
             item = self.info_account_layout.itemAt(i)
             if (widget := item.widget()) and isinstance(widget, IconToggleCheckboxCard) and (widget.isChecked()):
                 for u in self.user_list:
                     if u["name"] == widget.label.text():
-                        u["sleep"] = sleep_num
                         u["domin"] = self.domin
                         accounts.append(u)
-                        sleep_num += random.randint(50, 80)
         for i in range(self.score_post_show_layout.count()):
             item = self.score_post_show_layout.itemAt(i)
             if (widget := item.widget()) and isinstance(widget, IconToggleCheckboxCard) and (widget.isChecked()):
@@ -440,12 +440,15 @@ class ScorePage(QWidget):
         
         try:
             self.task_number = len(accounts) * len(pyposts)
+            sleep_num = 5
             for u in accounts:
                 for py in pyposts:
                     u["pyer"] = py
                     u["pytype"] = 'post'
-                    thread = ScoreThread(u)
+                    u["sleep"] = sleep_num
+                    sleep_num += random.randint(50, 120)
 
+                    thread = ScoreThread(u)
                     thread.task_finished.connect(self.finish_score)
                     self.score_task_threads.append(thread)
                     thread.start()
@@ -457,16 +460,14 @@ class ScorePage(QWidget):
         self.btn_Enable_false()
         accounts = []
         pyaccounts = []
-        sleep_num = 10
+        sleep_num = 5
         for i in range(self.info_account_layout.count()):
             item = self.info_account_layout.itemAt(i)
             if (widget := item.widget()) and isinstance(widget, IconToggleCheckboxCard) and (widget.isChecked()):
                 for u in self.user_list:
                     if u["name"] == widget.label.text():
-                        u["sleep"] = sleep_num
                         u["domin"] = self.domin
                         accounts.append(u)
-                        sleep_num += random.randint(60, 150)
         for i in range(self.score_account_show_layout.count()):
             item = self.score_account_show_layout.itemAt(i)
             if (widget := item.widget()) and isinstance(widget, IconToggleCheckboxCard) and (widget.isChecked()):
@@ -484,12 +485,14 @@ class ScorePage(QWidget):
 
         try:
             self.task_number = len(accounts) * len(pyaccounts)
+            sleep_num = 5
             for u in accounts:
                 for py in pyaccounts:
                     u["pyer"] = py
                     u["pytype"] = 'user'
+                    u["sleep"] = sleep_num
+                    sleep_num += random.randint(50, 120)
                     thread = ScoreThread(u)
-
                     thread.task_finished.connect(self.finish_score)
                     self.score_task_threads.append(thread)
                     thread.start()
