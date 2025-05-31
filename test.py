@@ -1,22 +1,7 @@
-from PySide6.QtCore import QThread
-from time import sleep
+import os
 
-class MyThread(QThread):
-    def __init__(self, info):
-        super().__init__()
-        self.info = info
+folder_path = r"C:\Users\wlmy\Desktop\98助手客户端UI 1.3\_internal"  # 例如 'C:/Users/YourName/Desktop'
 
-    def run(self):
-        print("线程中 info：", self.info)
-
-info = {"sleep": 1}
-t1 = MyThread(info)
-t1.start()
-
-# 修改 info
-info["sleep"] = 2
-t2 = MyThread(info)
-t2.start()
-
-t1.wait()
-t2.wait()
+# 打印该目录下的所有文件和文件夹
+for item in os.listdir(folder_path):
+    print(item)

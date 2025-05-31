@@ -10,17 +10,6 @@ from ui import setting_page_ui, sign_page_ui, score_page_ui, vedio_page_ui, tool
 
 from Utils.path_resolver import resource_path
 
-# class Widget(QFrame):
-#
-#     def __init__(self, text: str, parent=None):
-#         super().__init__(parent=parent)
-#         self.label = QLabel(text, self)
-#         self.label.setAlignment(Qt.AlignCenter)
-#         self.hBoxLayout = QHBoxLayout(self)
-#         self.hBoxLayout.addWidget(self.label, 1, Qt.AlignCenter)
-#         self.setObjectName(text.replace(' ', '-'))
-
-
 class MainWindow(FramelessWindow):
 
     def __init__(self):
@@ -83,7 +72,7 @@ class MainWindow(FramelessWindow):
     def initWindow(self):
         self.resize(900, 700)
         self.setWindowIcon(QIcon(resource_path('Resource/image/logo.png')))
-        self.setWindowTitle('98助手客户端UI 1.3')
+        self.setWindowTitle('98助手客户端UI 1.5')
         self.setQss()
 
         desktop = QApplication.primaryScreen().availableGeometry()

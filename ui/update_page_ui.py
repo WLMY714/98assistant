@@ -53,7 +53,7 @@ class UpdatePage(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.thread_list = []
 
-        self.version = "version1.3"
+        self.version = "version1.5"
         self.textbox = None
 
         # 主布局：上下添加伸缩空间实现居中

@@ -137,8 +137,26 @@ class DownloadThread(QThread):
                 task_result["content"].filename
             )
             self.end_save_user.emit('🎉YUt 帖子模板保存完成！')
+        elif self.code == 'kokomigin-pro':
+            self.start_save_user.emit('👑正在保存 kokomigin 帖子模板……')
+            fanza_vedio.create_kokomi_post(
+                task_result["content"].get_day,
+                task_result["content"].makers,
+                task_result["content"].movie_list,
+                task_result["content"].filename
+            )
+            self.end_save_user.emit('🎉kokomigin 帖子模板保存完成！')
+        elif self.code == 'kokomigin':
+            self.start_save_user.emit('👑正在保存 kokomigin 帖子模板……')
+            fanza_vedio.create_kokomi_post(
+                task_result["content"].get_day,
+                task_result["content"].makers,
+                task_result["content"].movie_list,
+                task_result["content"].filename
+            )
+            self.end_save_user.emit('🎉kokomigin 帖子模板保存完成！')
 
-        if self.code in ['2', '3', 'yut98t', 'lbsl98t', 'r3698t']:
+        if self.code in ['2', '3', 'yut98t', 'lbsl98t', 'r3698t', 'kokomigin', 'kokomigin-pro']:
             task_number = 0
             isyut = True if self.code == 'yut98t' else False
             vp_downloader = MultiThreadedDownloader(isyut=isyut, max_workers=10, timeout=60)
@@ -149,18 +167,19 @@ class DownloadThread(QThread):
                     path = str(path) + '/' + f'www.98t.la@{movie["maker"]}'
                 else :
                     path = str(path) + '/' + movie["maker"]
-                if self.code in ['2', 'yut98t', 'lbsl98t', 'r3698t']:
+                if self.code in ['2', 'yut98t', 'lbsl98t', 'r3698t', 'kokomigin', 'kokomigin-pro']:
                     filename = movie["face"].split("/")[-1]
                     filename = filename.replace("pl", "").replace("hhb", "")  # 去除 "pl" 或 "hhb"
                     self.start_download_pic.emit(f'📸开始下载：{filename}')
                     task_number += 1
                     futures.append(vp_downloader.download_file(url=movie["face"], save_dir=path))
-                if self.code in ['3', 'yut98t']:
-                    filename = movie["vedio"].split("/")[-1]
-                    filename = filename.replace("pl", "").replace("hhb", "")  # 去除 "pl" 或 "hhb"
-                    self.start_download_vedio.emit(f'🎬开始下载：{filename}')
-                    task_number += 1
-                    futures.append(vp_downloader.download_file(url=movie["vedio"], save_dir=path))
+                if self.code in ['3', 'yut98t', 'kokomigin-pro']:
+                    if movie["vedio"]:
+                        filename = movie["vedio"].split("/")[-1]
+                        filename = filename.replace("pl", "").replace("hhb", "")  # 去除 "pl" 或 "hhb"
+                        self.start_download_vedio.emit(f'🎬开始下载：{filename}')
+                        task_number += 1
+                        futures.append(vp_downloader.download_file(url=movie["vedio"], save_dir=path))
 
             finish_num = 1
             for future in as_completed(futures):
@@ -203,7 +222,7 @@ class CustomMessageBox(MessageBoxBase):
     def validate(self):
         """ Rewrite the virtual method """
         isValid = False
-        valid_code = ['1', '2', '3', 'lbsl98t', 'yut98t', 'r3698t', 'lbsl98t-l', 'yut98t-l']
+        valid_code = ['1', '2', '3', 'lbsl98t', 'yut98t', 'r3698t', 'lbsl98t-l', 'yut98t-l', 'kokomigin-pro', 'kokomigin']
         if self.urlLineEdit.text() in valid_code :
             isValid = True
         self.warningLabel.setHidden(isValid)

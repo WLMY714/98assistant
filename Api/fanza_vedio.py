@@ -87,8 +87,8 @@ def movie_available(movie, ban_words, makers):
     for word in ban_words:
         if word in test_title or word in test_id:
             return False
-    if test_maker not in makers:
-        return False
+    # if test_maker not in makers:
+    #     return False
     return True
 
 def maker_name_replace(maker):
@@ -268,7 +268,8 @@ def transform_string(input_str):
         # 拼接成格式 "SAME-151"
         return f"{letters}-{int(number):03}"
     else:
-        raise ValueError("输入字符串格式不正确")
+        return input_str
+        # raise ValueError("输入字符串格式不正确")
 
 def find_nth_weekday_of_month(n, weekday):
     # 获取当前月份的第一天和最后一天
@@ -528,6 +529,60 @@ def create_lbsl_post(get_day, makers, movie_list, filename):
 
     file.close()
 
+def count_unique_makers(nested_list):
+    maker_set = set()
+    for sublist in nested_list:
+        for item in sublist:
+            maker = item.get('maker')
+            if maker is not None:
+                maker_set.add(maker)
+    return len(maker_set), list(maker_set)
+
+def create_kokomi_post(get_day, makers, movie_list, filename):
+    path = resource_path(f'./Resource/cache/file/{filename}')
+    file = open(path + '/' + '【kokomigin】帖子模板.txt', 'w', encoding='utf-8')
+    file.write('[postbg]bg2.png[/postbg]\n')
+    file.write('\n')
+    file.write('[index]\n')
+
+    # cnts, mks = count_unique_makers(movie_list)
+
+    file.write('[#1] 首页\n')
+    file.write(f'[#2] {get_day} 配信内容\n')
+
+    file.write('[/index]\n')
+    file.write('\n')
+    file.write('[align=center][img=600,100]https://tju.7pzzv.us/tupian/forum/202505/06/012251itpmssx3imrt1drz.gif[/img][/align]\n')
+    file.write('\n')
+    file.write('[align=center][img=667,500]https://tju.7pzzv.us/tupian/forum/202505/07/132249wkonu99tq24to0o4.gif[/img][/align]\n')
+    file.write('\n')
+    file.write('[align=center][img]https://tupian.li/images/2025/03/08/67cbf1ca30feb.png[/img][/align]\n')
+    file.write('\n')
+
+    file.write('[page]\n')
+
+    file.write('\n')
+    for mk in maker_all:
+        number = sum(1 for movie in movie_list if movie['maker'] == mk)
+        if number < 1:
+            continue
+        file.write(f'[align=center][font=微软雅黑][size=5][b] {mk} : 共{number}部 [/b][/size][/font][/align]\n')
+        file.write('[align=center][font=微软雅黑][size=5] [/size][/font][/align]\n')
+        for movie in movie_list:
+            if movie['maker'] == mk:
+                file.write(f'[b][color=#5375e1][font=微软雅黑][size=4]出演：{movie["name"]}[/size][/font][/color][/b]\n')
+                file.write(f'[b][color=#5375e1][font=微软雅黑][size=4]番号：{transform_string(movie["id"])}[/size][/font][/color][/b]\n')
+                file.write(f'[b][color=#5375e1][font=微软雅黑][size=4]片名：{movie["title"]}[/size][/font][/color][/b]\n')
+                file.write('\n')
+                file.write('[font=微软雅黑][size=4][color=#ff0000][b]【预览视频】[/b][/color][/size][/font]\n')
+                file.write('\n')
+                file.write('\n')
+                file.write('[img]static/image/hrline/2.gif[/img]\n')
+                file.write('\n')
+                file.write('\n')
+                file.write('\n')
+    file.close()
+
 def save_3(filename, makers, movie_list):
     save_file_with_type('face', filename, makers, movie_list)
     save_file_with_type('fanza', filename, makers, movie_list)
@@ -601,6 +656,9 @@ class Downloader:
     def solve_movie_list(self):
         self.movie_list = get_movie_list(self.cookie, self.get_day, self.ban_words, self.makers)
         # 按照 maker 排序，如果相同则按 id 排序
+        for movie in self.movie_list:
+            if movie['maker'] not in maker_all:
+                maker_all.append(movie['maker'])
         self.movie_list = sorted(self.movie_list, key=lambda x: (maker_all.index(x["maker"]), x["id"]))
         # 删除0部的厂家
         for maker in maker_all:
